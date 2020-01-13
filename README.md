@@ -26,7 +26,7 @@
    }
    # 网页文件位置和url重写
    location / {
-       root   E:/bbs/web/;
+       root   E:/bbs/static/;
        index  index.html;
        rewrite ^/(\w+)(/\d*)?$ /page/$1.html;
    }

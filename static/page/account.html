@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+</head>
+<script src="https://cdn.staticfile.org/vue/2.6.10/vue.min.js"></script>
+<script src="https://cdn.staticfile.org/axios/0.19.0-beta.1/axios.min.js"></script>
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <script type="text/javascript" src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<style>
+    #app{
+
+        width: 950px;
+        margin: auto;
+        margin-top: 10px;
+    }
+    form{
+        margin-top: 100px;
+    }
+    .msg{
+        position: absolute;
+        margin-top: -50px;
+        color: red;
+    }
+
+    [v-cloak]{
+        display:none !important;
+    }
+    img{
+        width: 200px;
+        height: 200px;
+    }
+    .nav{
+        font-size: 18px;
+    }
+    .form-horizontal{
+        font-size: 18px;
+    }
+    .cover{
+        width: 200px;
+        height: 200px;
+        background-color:rgb(255,255,255,0.6);
+        color: black;
+        position: absolute;
+        line-height: 200px;
+    }
+    .info{
+        border-bottom: 1px solid #CCCCCC;
+        color: #7D7D7D;
+    }
+    .breadcrumb{
+        padding: 15px;
+        margin-bottom: 0px;
+    }
+    .navbar-right{
+        margin-right: 10px;
+    }
+    .navbar{
+        font-size: 17px;
+    }
+    nav img{
+        width: 50px;
+        height: 50px;
+        /*border-radius: 25px;*/
+        margin-right: 10px;
+    }
+</style>
+<body>
+<div id="app" v-if="account" v-cloak>
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <ol class="breadcrumb">
+                    <li><a href="/index.html">主页</a></li>
+                </ol>
+            </div>
+
+
+            <div class="collapse navbar-collapse" id="navbar" >
+
+                <ul class="nav navbar-nav navbar-right" v-if="user">
+                    <li><img :src="'/avatar/'+user.avatar" alt=""></li>
+
+                    <li class="dropdown" >
+
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user.username}} <span class="caret"></span></a>
+
+                        <ul class="dropdown-menu">
+                            <li><a href="/account">个人中心</a></li>
+                            <li><a href="javascript:void(0)">没有功能</a></li>
+                            <li><a href="javascript:void(0)">没有功能</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/page/replyme.html">消息</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/replyme">消息 <span class="badge">{{user.msgCount==0?"":user.msgCount}}</span></a></li>
+                    <li><a href="javascript:void(0)" @click="logout">退出</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right" v-if="!user">
+                    <li> <a type="button" href="/signin">登录</a></li>
+                    <li><a type="button" href="/signup">注册</a></li>
+
+
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+
+
+    <ul class="nav nav-pills nav-justified">
+        <li role="presentation" :class="{active:isActive==1}">
+            <a href="javascript:void(0)" @click="is_active(1)">个人资料</a>
+        </li>
+        <li role="presentation" :Class="{active:isActive==2}" v-if="user&&account.userId==user.userId">
+            <a href="javascript:void(0)" @click="is_active(2)">安全</a>
+        </li>
+        <li role="presentation" :Class="{active:isActive==3}" v-if="user&&account.userId==user.userId">
+            <a href="javascript:void(0)" @click="getMyThread(3)">发帖信息</a>
+        </li>
+    </ul>
+
+    <!-- 个人资料 -->
+    <form class="form-horizontal" v-if="isActive==1&&user&&account.userId==user.userId">
+        <div class="form-group" >
+
+            <label class="col-sm-offset-3 col-sm-2 control-label">头像</label>
+            <div class="col-sm-3"  @mouseenter="cover_show(true)"
+                 @mouseleave="cover_show(false)" >
+                <div class="msg">{{msg}}</div>
+                <label for="file" >
+                    <div class="text-center cover"   v-show="coverShow" >修改</div>
+                    <img :src="avatar" >
+                </label>
+            </div>
+            <input type="file"  accept="image/*"  @change="changeImg" id="file" v-show="false">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-offset-3 col-sm-2 control-label">用户名</label>
+            <div class="col-sm-3">
+
+                <input type="text" class="form-control" v-model="account.username"
+                >
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-offset-3 col-sm-2 control-label">性别</label>
+            <div class="col-sm-3">
+                <label class="radio-inline">
+                    <input type="radio" value="男" v-model="account.sex"> 男
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" value="女" v-model="account.sex"> 女
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" value="保密" v-model="account.sex"> 保密
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-offset-3 col-sm-2 control-label">生日</label>
+            <div class="col-sm-3">
+                <input type="date" class="form-control" v-model="account.birthday">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-5 col-sm-10">
+                <button type="button" class="btn btn-default" @click="update_account">确认修改</button>
+                <a type="button" class="btn btn-default" href="/">返回主页</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- 非本人的公开资料 -->
+    <form class="form-horizontal" v-if="isActive==1&&!(user&&user.userId==account.userId)">
+        <div class="form-group" >
+            <label class="col-sm-offset-3 col-sm-2 control-label">头像</label>
+            <div class="col-sm-3" >
+                <div class="msg">{{msg}}</div>
+                <label for="file" >
+                    <img :src="'/avatar/'+account.avatar">
+                </label>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-offset-3 col-sm-2 control-label">用户名</label>
+            <div class="col-sm-3 info">
+
+                <label class="control-label">{{account.username}}</label>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-offset-3 col-sm-2 control-label">性别</label>
+            <div class="col-sm-3 info">
+                <label class="control-label">
+                    {{account.sex}}
+                </label>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-offset-3 col-sm-2 control-label">生日</label>
+            <div class="col-sm-3 info">
+                <label class="control-label">
+                    {{account.birthday}}
+                </label>
+            </div>
+        </div>
+        <div class="form-group" v-if="account.emailPublic" >
+            <label class="col-sm-offset-3 col-sm-2 control-label">邮箱</label>
+            <div class="col-sm-3 info">
+                <label class="control-label">
+                    {{account.email}}
+                </label>
+            </div>
+        </div>
+        <div class="form-group" v-if="account.telPublic">
+            <label class="col-sm-offset-3 col-sm-2 control-label">电话</label>
+            <div class="col-sm-3 info">
+                <label class="control-label">
+                    {{account.tel}}
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-5 col-sm-10">
+                <a type="button" class="btn btn-default" href="/">返回主页</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- 隐私信息 -->
+    <form class="form-horizontal" v-if="isActive==2">
+        <div class="form-group">
+            <label class="col-sm-offset-4 col-sm-1 control-label">邮箱</label>
+            <div class="col-sm-3">
+                <div class="msg">{{msg}}</div>
+                <label class="col-sm-1 control-label">{{account.email}}</label>
+            </div>
+            <div class="col-sm-2">
+
+                <select class="form-control" v-model="account.emailPublic">
+                    <option value="false">保密</option>
+                    <option value="true">公开</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-offset-3 col-sm-2 control-label">电话</label>
+            <div class="col-sm-3">
+                <input type="tel" class="form-control" v-model="account.tel">
+            </div>
+            <div class="col-sm-2">
+                <select class="form-control" v-model="account.telPublic">
+                    <option value="false">保密</option>
+                    <option value="true">公开</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-offset-3 col-sm-2 control-label">旧密码</label>
+            <div class="col-sm-3">
+                <input type="password" class="form-control" v-model="oldPassword">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-offset-2 col-sm-3 control-label">新密码</label>
+            <div class="col-sm-3">
+                <input type="password" class="form-control" v-model="newPassword">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-offset-2 col-sm-3 control-label">确认新密码</label>
+            <div class="col-sm-3">
+                <input type="password" class="form-control" v-model="confirmPassword">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-5 col-sm-10">
+                <button type="button" class="btn btn-default" @click="update_security">确认修改</button>
+                <a type="button" class="btn btn-default" href="/">返回主页</a>
+            </div>
+        </div>
+    </form>
+
+
+    <!-- 发帖信息 -->
+    <table class="table" v-if="isActive==3">
+        <tr>
+            <th>帖子</th>
+            <th>版块</th>
+            <th>时间</th>
+        </tr>
+        <tr v-for="item in myThread">
+            <td><a :href="'reply.html?id='+item.threadId">{{item.title}}</a></td>
+            <td>{{item.boardName}}</td>
+            <td>{{item.postTime}}</td>
+        </tr>
+    </table>
+</div>
+</body>
+<script>
+
+    axios.interceptors.response.use(result=> {
+        return result
+    }, error=> {
+
+        if(error.response.status==404){
+            window.location.href="/404"
+        }if(error.response.status==401){
+            window.location.href="/signin"
+        }else{
+            vm.msg=error.response.data.msg
+        }
+
+        return Promise.resolve(error);
+    })
+
+    axios.defaults.baseURL = '/bbs'
+    var vm=new Vue({
+        el:"#app",
+        data:{
+            user:"",
+            avatar:"",
+            threadList:"",  //发帖列表
+            oldPassword:"", //旧密码
+            newPassword:"", //新密码
+            confirmPassword:"", //确认新密码
+            post:false, //发帖信息是否展示
+            msg:"",  //后台返回的操作信息
+            coverShow:false,
+            isActive:1,
+            account:"",
+            img:"",
+            myThread:""
+
+        },
+        mounted(){
+            var url = window.location.href
+            var index = url.lastIndexOf("/")
+            var userId=url.substring(index+1,url.length)
+            if(userId>0){
+                this.userId=userId
+            }
+
+            this.getUser()
+            this.getAccount()
+        },
+        methods:{
+            getUser(){
+                axios.get("/user").then(
+                    result=>{
+                    console.log(result)
+                    this.user=result.data.data
+                })
+            },
+            getAccount(){
+                var param="";
+                if(this.userId){
+                    param="/"+this.userId
+                }
+                axios.get("/account"+param).then(
+                    result=>{
+
+                    this.account=result.data.data
+                    this.avatar="/avatar/"+this.account.avatar
+                })
+            },
+            async update_account(){
+        var account=this.account
+        await this.uploadAvatar()
+        await  axios.put("/account",{
+            username:account.username,
+            sex:account.sex,
+            birthday:account.birthday
+        }).then(result=>{
+            if(result.data.code==200){
+            this.getUser()
+            this.msg="修改成功"
+        }
+    })
+
+
+
+
+
+
+    },
+    update_security(){ //更新安全信息
+        var data=this.account
+        if(this.newPassword!==this.confirmPassword){
+            this.msg="新密码不一致"
+        }else{
+            axios.put("/account",{
+                tel:data.tel,
+                oldPassword:data.oldPassword,
+                newPassword:data.newPassword,
+                emailPublic:data.emailPublic,
+                telPublic:data.telPublic
+            }).then(result=>{
+                this.msg="修改成功"
+
+            })
+        }
+
+    },
+    is_active(activeId){
+        this.msg=""
+        this.isActive=activeId
+    },
+    getMyThread(activeId){
+        this.msg=""
+        this.isActive=activeId
+        axios.get("/account/myThread").then(result=>{
+            this.myThread=result.data.data
+        })
+    },
+    changeImg(){
+        console.log(window.event)
+        var file=window.event.target.files[0]
+        this.img=file
+        var reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = function () {
+            vm.avatar=this.result
+        }
+    },
+    async uploadAvatar(){
+        if(this.avatar&&this.img){
+            var param = new FormData(); //创建form对象
+
+            param.append('file',this.img);
+            await axios.post("/avatar",param,{
+                headers:{'Content-Type':'multipart/form-data'}
+            }).then(result=>{
+                console.log(result)
+            })
+        }
+
+    },
+    cover_show(coverShow){
+        this.coverShow=coverShow
+    },
+    logout(){
+        axios.get("/logout", {
+        }).then(result => {
+            window.location.href="/account/"+this.account.userId
+
+        })
+    }
+    }
+    })
+</script>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script  src="http://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+	<script  src="http://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<script type="text/javascript">
+	function yy() {
+			
+		 window.location.href="/test2"
+  }
+</script>
+<body>
+
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar_1">
+
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <ol class="breadcrumb">
+                    <li><a href="/index.html">主页</a></li>
+                </ol>
+            </div>
+
+
+            <div class="collapse navbar-collapse" id="navbar_1" >
+
+                <ul class="nav navbar-nav navbar-right" v-if="user">
+                    <li><img :src="'/avatar/'+user.avatar" alt=""></li>
+
+                    <li class="dropdown" >
+
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="caret"></span></a>
+
+                        <ul class="dropdown-menu">
+                            <li><a href="/account">个人中心</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/page/replyme.html">消息</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/replyme">消息 <span class="badge"></span></a></li>
+                    <li><a href="javascript:void(0)" @click="logout">退出</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right" v-if="!user">
+                    <li> <a type="button" href="/signin">登录</a></li>
+                    <li><a type="button" href="/signup">注册</a></li>
+
+
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+</body>
+</html>

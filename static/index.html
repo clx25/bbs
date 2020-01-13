@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue/2.6.10/vue.min.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.19.0-beta.1/axios.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <script type="text/javascript" src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+<style type="text/css">
+    #app{
+        margin-top: 10px;
+    }
+    table{
+        margin-top: 10px;
+    }
+    .boardName{
+        width: 300px;
+    }
+    .sign{
+        float: right;
+        margin-right: 10px;
+    }
+/*    a:hover, a:visited, a:link, a:active {
+        text-decoration: none;
+        color: black;
+    }*/
+
+    .nav{
+        float: left;
+        margin-left: 10px;
+    }
+    .msg{
+        color: red;
+    }
+    [v-cloak]{
+            display:none !important;
+    }
+    img{
+        width: 50px;
+        height: 50px;
+        /*border-radius: 25px;*/
+        margin-right: 10px;
+    }
+    .breadcrumb{
+        padding: 15px;
+        margin-bottom: 0px;
+    }
+    .navbar-right{
+        margin-right: 10px;
+    }
+    .navbar{
+        font-size: 17px;
+    }
+
+</style>
+<body>
+<div id="app" class="container" v-show="boardList" v-cloak>
+
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <ol class="breadcrumb">
+  <li><a href="javascript:void(0)">主页</a></li>
+</ol>
+    </div>
+
+
+ <div class="collapse navbar-collapse" id="navbar" >
+
+      <ul class="nav navbar-nav navbar-right"v-if="user">
+        <li><img :src="'/avatar/'+user.avatar" alt=""></li>
+  
+        <li class="dropdown" >
+            
+
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user.username}} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/account">个人中心</a></li>
+            <li><a href="javascript:void(0)">没有功能</a></li>
+            <li><a href="javascript:void(0)">没有功能</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="/page/replyme.html">消息</a></li>
+          </ul>
+        </li>
+         <li><a href="/replyme">消息 <span class="badge">{{user.msgCount==0?"":user.msgCount}}</span></a></li>
+        <li><a href="javascript:void(0)" @click="logout">退出</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" v-if="!user">
+        <li> <a type="button" href="/signin">登录</a></li>
+        <li><a type="button" href="/signup">注册</a></li>
+     
+      
+       </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<!--     <div class="row">
+        <div class="col-md-8" >
+            <a href="javascript:void(0)" class="nav">
+                主页<span class="glyphicon glyphicon glyphicon-menu-right"></span>
+            </a>
+            <div class="col-md-offset-5 col-md-3 msg" >{{msg}}</div>
+        </div>
+
+
+        <div v-if="simpleUserInfo">
+            
+            <div class="col-md-3 text-center">
+                <a href="page/account.html" target="_blank" >{{simpleUserInfo.username}}</a>
+                <div class="col-md-1"><img :src="'/img/'+simpleUserInfo.avatar"></div>
+            </div>
+            <div class="col-md-1 text-center"><a href="javascript:void(0)" @click="logout" >退出</a></div>
+            
+     
+        </div>
+        <div v-if="!simpleUserInfo">
+            <a href="page/signin.html" class="btn btn-default col-md-offset-1 col-md-1">登录</a>
+            <a href="page/signup.html" class="btn btn-default col-md-1">注册</a>
+        </div>
+
+    </div> -->
+
+    <table class="table table-striped">
+        <tr><th>版块</th><th>描述</th></tr>
+        <tr  v-for="item in boardList" :key="item.boardId">
+            <td class="boardName">
+                <a :href="'/board/'+item.boardId">{{item.boardName}}</a>
+            </td>
+            <td class="description">{{item.description}}</td></tr>
+    </table>
+
+
+
+</div>
+
+</body>
+<script>
+
+
+        axios.defaults.baseURL = '/bbs'
+    var vm=new Vue({
+        el:"#app",
+        data:{
+            boardList:"",
+            isAuthenticated:false,
+            msg:"",
+            user:""
+        },
+        created(){
+            
+            this.getBoard()
+            this.getUser()
+        },
+        methods:{
+            getBoard(){
+                axios.get("/board").then(
+                    result=>{
+                        console.log(result)
+                        this.boardList=result.data.data
+                        this.userId=result.data.userId
+                        
+                }
+                )
+            },
+            getUser(){
+                axios.get("/user").then(
+                    result=>{
+                        this.user=result.data.data
+                    })
+            },
+            logout(){
+                axios.get("/logout", {
+                }).then(result => {
+                    this.user=""
+                
+            })
+            }
+        }
+    })
+</script>
+</html>
