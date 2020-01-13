@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.own.mapper.BoardMapper">
+
+    <select id="listEnableBoard" resultType="boardDO">
+        select id,board_name,description from board where enable=1
+    </select>
+
+    <select id="getBoardById" parameterType="Integer" resultType="boardDO">
+        select id, board_name, description, enable from board where id=#{value}
+    </select>
+
+    <select id="listBoardInBoardIds"  resultType="boardDO">
+        select id, board_name, description, enable from board where enable=1 and  id in
+
+            <foreach collection="collection" open="(" close=")" item="boardId" separator=",">
+                #{boardId}
+            </foreach>
+
+
+    </select>
+</mapper>

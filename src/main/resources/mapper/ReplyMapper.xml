@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.own.mapper.ReplyMapper">
+
+    <resultMap id="replyMap" type="replyDO">
+        <id property="id" column="id"/>
+        <result property="first" column="is_first"/>
+    </resultMap>
+
+    <insert id="insertReply" parameterType="replyDTO">
+        <selectKey resultType="Integer" order="AFTER" keyColumn="id" keyProperty="replyId">
+            select last_insert_id()
+        </selectKey>
+
+        INSERT reply (
+        user_id,
+        content,
+        thread_id,
+        post_id,
+        is_first
+        ) VALUE (
+        #{userId},
+        #{content},
+        #{threadId},
+        #{postId},
+        #{first}
+        )
+    </insert>
+
+
+    <select id="listPostByThreadId" parameterType="Long" resultMap="replyMap">
+        select id,
+               user_id,
+               content,
+               thread_id,
+               post_id,
+               is_first,
+               is_del,
+               gmt_create,
+               gmt_modified
+        from reply
+        where thread_id = #{threadId}
+          and is_del = 0
+          and post_id = 0
+    </select>
+
+    <select id="countLzlInPostIds" resultMap="replyMap">
+        select post_id,count(*) lzlCount from reply where is_del=0 and post_id in
+        <foreach collection="collection" open="(" close=")" item="postId" separator=",">
+            #{postId}
+        </foreach>
+        group by post_id
+    </select>
+
+    <select id="getReplyById" resultMap="replyMap">
+        select id,
+               user_id,
+               content,
+               thread_id,
+               post_id,
+               is_first,
+               is_del,
+               gmt_create,
+               gmt_modified
+        from reply
+        where id = #{value}
+    </select>
+
+    <select id="listReplyInIds" resultMap="replyMap">
+        select id, user_id, content, thread_id, post_id, is_first, is_del, gmt_create, gmt_modified from reply
+        where reply.id in
+        <foreach collection="collection" open="(" close=")" item="replyId" separator=",">
+            #{replyId}
+        </foreach>
+    </select>
+
+    <select id="listLzlByPostId" resultMap="replyMap">
+        select id,
+               user_id,
+               content,
+               thread_id,
+               post_id,
+               is_first,
+               is_del,
+               gmt_create,
+               gmt_modified
+        from reply
+        where post_id = #{value}
+          and is_del = 0
+    </select>
+
+    <resultMap id="countReplyInThreadIdsMap" type="threadDO">
+        <id column="thread_id" property="id"/>
+        <result column="replyCount" property="replyCount"/>
+    </resultMap>
+    <select id="countReplyInThreadIds" resultMap="countReplyInThreadIdsMap">
+        select thread_id,count(*) replyCount from reply where is_del=0 and thread_id in
+        <foreach collection="collection" open="(" close=")" item="threadId" separator=",">
+            #{threadId}
+        </foreach>
+        group by thread_id
+    </select>
+
+    <select id="isReplyExists" resultType="boolean">
+        select count(*)
+        from reply
+        where id = #{replyId}
+    </select>
+
+
+
+    <update id="deleteReply">
+        update reply
+        set is_del=1
+        where id = #{value}
+    </update>
+
+    <update id="deleteLzlByPostId">
+        update reply
+        set is_del=1
+        where post_id = #{value}
+    </update>
+
+    <update id="deleteReplyByThreadId">
+        update reply
+        set is_del=1
+        where thread_id = #{threadId}
+    </update>
+
+
+</mapper>

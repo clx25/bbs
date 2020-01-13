@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.own.mapper.ThreadMapper">
+    <insert id="addThread" parameterType="addThreadDTO">
+        <selectKey resultType="Integer" order="AFTER" keyColumn="id" keyProperty="threadId">
+            select last_insert_id()
+        </selectKey>
+        insert thread(title,user_id,board_id) value(#{title},#{userId},#{boardId})
+    </insert>
+
+
+    <select id="listThreadByBoardId" parameterType="Integer" resultType="threadDO">
+        SELECT id,
+               title,
+               user_id,
+               reply_count,
+               board_id,
+               is_del,
+               gmt_create,
+               gmt_modified
+        FROM thread
+        WHERE board_id = #{value}
+          and is_del = 0
+        order by id desc
+    </select>
+
+    <select id="getThreadByThreadId" resultType="threadDO">
+        select id,
+               title,
+               user_id,
+               reply_count,
+               board_id,
+               is_del,
+               gmt_create,
+               gmt_modified
+        from thread
+        where id = #{threadId}
+    </select>
+
+    <select id="listThreadInThreadIds" resultType="threadDO">
+        select id, title, user_id, reply_count, board_id, is_del, gmt_create, gmt_modified from thread where id in
+        <foreach collection="collection" open="(" close=")" item="threadId" separator=",">
+            #{threadId}
+        </foreach>
+    </select>
+
+    <select id="listMyThread" resultType="threadDO">
+        SELECT *
+        FROM thread
+        WHERE user_id = #{userId}
+          AND EXISTS
+            (SELECT *
+             FROM reply
+             WHERE thread_id = thread.id
+               AND is_first = 1
+               AND reply.is_del = 0)
+    </select>
+
+
+    <update id="deleteThreadByThreadId">
+        update thread
+        set is_del=1
+        where id = #{threadId}
+    </update>
+
+</mapper>

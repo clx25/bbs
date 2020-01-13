@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.own.mapper.ReplyMeMapper">
+
+    <insert id="addReplyMe">
+        insert reply_me(user_id, reply_id) value (#{userId}, #{replyId})
+    </insert>
+
+    <select id="countReplyMe" resultType="Integer">
+        SELECT COUNT(*)
+        FROM reply_me
+        WHERE EXISTS(
+                SELECT *
+                FROM reply
+                WHERE is_del = 0
+                  AND reply.`id` = reply_id
+            )
+          AND user_id = #{userId}
+          AND is_read = 0
+    </select>
+
+    <select id="listReplyMeByUserId" resultType="replyDO">
+        SELECT id, user_id, content, thread_id, post_id, gmt_create, gmt_modified
+        FROM reply
+        WHERE EXISTS(
+                SELECT *
+                FROM reply_me
+                WHERE is_read = #{read}
+                  AND reply_me.`user_id` = #{userId}
+                  AND reply.`id` = reply_id
+            )
+          AND is_del = 0
+    order by gmt_create desc
+    </select>
+
+
+    <update id="updateRead">
+        update reply_me
+        set is_read=1
+        where user_id = #{userId}
+          and reply_id = #{replyId}
+    </update>
+
+    <update id="updateAllRead">
+        update reply_me
+        set is_read=1
+        where user_id = #{userId}
+    </update>
+
+
+    <update id="deleteReplyMeIfExists">
+        UPDATE
+            reply
+        SET is_del = 1
+        WHERE id = #{replyId}
+          AND EXISTS(
+                SELECT *
+                FROM reply_me
+                WHERE reply_me.user_id = #{userId}
+                  and reply.id = reply_me.reply_id
+            )
+
+    </update>
+
+</mapper>

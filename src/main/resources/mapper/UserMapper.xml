@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.own.mapper.UserMapper">
+
+
+    <insert id="addUser" parameterType="signupDTO">
+        INSERT INTO USER(email, username, PASSWORD, salt)
+            VALUE (
+                   #{email},
+                   #{username},
+                   #{password},
+                   #{salt}
+            )
+    </insert>
+
+
+    <select id="hasEmail" parameterType="String" resultType="Boolean">
+        select count(*)
+        from user
+        where email = #{value}
+    </select>
+
+    <select id="getUserByEmail" parameterType="String" resultType="userDO">
+        SELECT id,
+               email,
+               username,
+               tel,
+               password,
+               salt,
+               integral,
+               gmt_create,
+               sex,
+               birthday,
+               email_public,
+               tel_public,
+               avatar
+        FROM user
+        WHERE email = #{value}
+    </select>
+
+    <select id="getUserById" resultType="userDO">
+        SELECT id,
+               email,
+               username,
+               tel,
+               password,
+               salt,
+               integral,
+               gmt_create,
+               sex,
+               birthday,
+               email_public,
+               tel_public,
+               avatar
+        FROM user
+        where id = #{value}
+    </select>
+
+    <select id="listUserByIds" resultType="userDo">
+        select id,
+        email,
+        username,
+        tel,
+        password,
+        salt,
+        integral,
+        gmt_create,
+        sex,
+        birthday,
+        email_public,
+        tel_public,
+        avatar
+        from user
+        where id in
+        <foreach collection="collection" open="(" close=")" item="userId" separator=",">
+            #{userId}
+        </foreach>
+    </select>
+
+
+    <update id="updateAccount" parameterType="updateAccountDTO">
+        update user
+        <set>
+            <if test="username!=null and username !=''">
+                username=#{username}
+            </if>
+            <if test="sex!=0">
+                ,sex=#{sex}
+            </if>
+            <if test="birthday!=null">
+                ,birthday=#{birthday}
+            </if>
+            <if test="emailPublic!=null">
+                ,email_public=#{emailPublic}
+            </if>
+            <if test="telPublic!=null">
+                ,tel_public=#{telPublic}
+            </if>
+            <if test="newPassword!='' and newPassword!=null">
+                ,password=#{newPassword}
+            </if>
+            <if test="tel!=null">
+                ,tel=#{tel}
+            </if>
+
+        </set>
+
+        where id = #{userId}
+    </update>
+
+    <update id="updateAvatarByEmail">
+        UPDATE USER
+        SET avatar =#{fileName}
+        WHERE email = #{email}
+    </update>
+
+    <update id="updatePasswordByEmail">
+        update user set password=#{password},salt=#{salt} where email=#{email}
+    </update>
+
+
+
+
+
+</mapper>
