@@ -25,6 +25,7 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Async;
@@ -37,24 +38,31 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+
 public class UserServiceImpl implements UserService {
 
-
+    @Resource
     private UserMapper userMapper;
+    @Resource
     private ThreadMapper threadMapper;
+    @Resource
     private BoardMapper boardMapper;
+    @Resource
     private ReplyMeMapper replyMeMapper;
 
+    @Resource
     private JavaMailSenderImpl mailSender;
-
+    @Resource
     private StringRedisTemplate stringRedisTemplate;
 
-
+    @Resource
+    private ExecutorService pool;
     //支持的头像图片类型
     @SuppressWarnings("UnstableApiUsage")
     private static final MediaType[] AVATAR_TYPE = {MediaType.JPEG, MediaType.PNG, MediaType.BMP, MediaType.GIF, MediaType.WEBP};
@@ -267,10 +275,8 @@ public class UserServiceImpl implements UserService {
             throw new ArgsNotValidException("该邮箱已存在");
         }
 
-
-        sendCaptchaAndSave(dto.getEmail());
-
-
+        pool.execute(()->sendCaptchaAndSave(dto.getEmail()));
+        pool.shutdown();
         return ResultUtil.success();
     }
 
@@ -280,7 +286,8 @@ public class UserServiceImpl implements UserService {
         if (!hasEmail) {
             throw new ArgsNotValidException("邮箱不存在");
         }
-        sendCaptchaAndSave(dto.getEmail());
+        pool.execute(()->sendCaptchaAndSave(dto.getEmail()));
+        pool.shutdown();
 
         return ResultUtil.success();
     }
@@ -317,8 +324,7 @@ public class UserServiceImpl implements UserService {
      *
      * @param email 邮箱
      */
-    @Async
-    public void sendCaptchaAndSave(String email) {
+    private void sendCaptchaAndSave(String email) {
         //创建一个6位数的随机字符串作为验证码
         String captcha = UUID.randomUUID().toString().substring(0, 6);
         SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -326,9 +332,11 @@ public class UserServiceImpl implements UserService {
         mailMessage.setText("验证码：" + captcha + "\n15分钟之内有效");
         mailMessage.setFrom("x_201904@sina.com");
         mailMessage.setTo(email);
-        mailSender.send(mailMessage);
 
         stringRedisTemplate.opsForValue().set(email, captcha, 15, TimeUnit.MINUTES);
+        mailSender.send(mailMessage);
+
+
     }
 
     /**

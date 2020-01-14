@@ -80,7 +80,7 @@ public interface UserService {
 
 
     /**
-     * 向邮箱发送验证码
+     * 向邮箱发送验证码用以注册
      *
      * @param dto 发送验证码需要的数据
      * @return 操作结果消息

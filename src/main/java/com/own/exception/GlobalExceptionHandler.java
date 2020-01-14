@@ -11,9 +11,12 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.mail.MailAuthenticationException;
+import org.springframework.mail.MailException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
+import java.lang.reflect.Method;
 
 /**
  * 异常统一处理
@@ -160,6 +164,20 @@ public class GlobalExceptionHandler {
         Status status = new Status();
         status.setMsg("网络异常，请稍后再试（手动滑稽）");
         return status;
+    }
+
+
+    //捕获多线程中的异常
+    public static class MyUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
+
+        @Override
+        public void uncaughtException(Thread t, Throwable e) {
+            if(e instanceof MailException){
+                log.error("邮件发送异常",e);
+            }else {
+                log.error("未知异常",e);
+            }
+        }
     }
 
 }
