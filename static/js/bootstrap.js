@@ -1519,7 +1519,7 @@ if (typeof jQuery === 'undefined') {
     offset.left += marginLeft
 
     // $.fn.offset doesn't round pixel values
-    // so we use setOffset directly with our own function B-0
+    // so we use setOffset directly with our bbs function B-0
     $.offset.setOffset($tip[0], $.extend({
       using: function (props) {
         $tip.css({

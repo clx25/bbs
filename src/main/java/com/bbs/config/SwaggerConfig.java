@@ -28,7 +28,7 @@ public class SwaggerConfig {
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .enable("dev".equals(activeProfile))
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.own.web.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.bbs.web.controller"))
                 .paths(PathSelectors.regex("((?!Error).)*"))
                 .build()
                 .tags(new Tag("版块控制器", "获取版块信息"), getTags());
