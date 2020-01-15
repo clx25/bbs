@@ -2,15 +2,23 @@
 
 前端：bootstrap,vue
 
-后端：SSM
+后端：springboot2，mybatis3
 
-数据库：mysql8.0，redis
+数据库：mysql8.0，redis（缓存）
 
-## 使用
+api文档：swagger2
 
-1. 修改项目配置文件application-dev.yml。配置mysql，redis，邮箱连接。日志文件位置。
+登录验证：shiro
 
-2. nginx添加配置
+主要功能：登录，注册，重置密码，发布帖子，回帖，楼中楼，对有权限的内容进行删除，接收消息，个人信息查看修改。
+
+## 测试运行
+
+1. 导入idea，修改项目配置文件application-dev.yml。配置mysql，redis，邮箱连接。日志文件位置。
+
+2. 默认头像文件名是default.jpg，需要在nginx配置的图片路径中添加该文件，默认图片文件名由数据库的user.avatar字段的默认值设置
+
+3. nginx添加配置
 
    ```
    # 图片服务器位置，由于nginx,tomcat,图片服务器在同一台电脑，所以配置的本地

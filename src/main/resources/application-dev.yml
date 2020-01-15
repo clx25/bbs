@@ -20,7 +20,7 @@ mybatis:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
     map-underscore-to-camel-case: true
     local-cache-scope: statement
-  type-aliases-package: com.own.entity
+  type-aliases-package: com.bbs.entity
 
 pagehelper:
   reasonable: true
