@@ -4,11 +4,11 @@
 
 后端：springboot2，mybatis3
 
+登录验证：shiro
+
 数据库：mysql8.0，redis（缓存）
 
 api文档：swagger2
-
-登录验证：shiro
 
 主要功能：登录，注册，重置密码，发布帖子，回帖，楼中楼，对有权限的内容进行删除，接收消息，个人信息查看修改。
 
