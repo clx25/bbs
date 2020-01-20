@@ -46,7 +46,7 @@ public class ReplyServiceImpl implements ReplyService {
     private ThreadMapper threadMapper;
 
     @Resource
-    private UserService userService;
+    private UserService userServiceImpl;
 
 
     @Override
@@ -174,7 +174,7 @@ public class ReplyServiceImpl implements ReplyService {
         dto.setThreadId(thread.getId());
 
         //添加用户信息
-        int userId = userService.getUserId();
+        int userId = userServiceImpl.getUserId();
         dto.setUserId(userId);
 
         //插入数据
@@ -223,7 +223,7 @@ public class ReplyServiceImpl implements ReplyService {
      * @return true为有删除权限，false为没有删除权限
      */
     private boolean deletePermissionCheck(ReplyDO reply) {
-        int userId = userService.getUserId();
+        int userId = userServiceImpl.getUserId();
         //这个回复是该用户发的
         if (reply.getUserId() == userId) {
             return true;

@@ -23,7 +23,7 @@ import javax.validation.constraints.Min;
 @Api(tags = "回复控制器")
 public class ReplyController {
 
-    private final ReplyService replyService;
+    private final ReplyService replyServiceImpl;
 
 
     @ApiOperation("根据帖子id获取回帖数据和分页信息")
@@ -33,7 +33,7 @@ public class ReplyController {
     @GetMapping("/post")
     public Result<PageInfo<ReplyVO>> getPost(@RequestParam @Min(value = 1, message = "threadId错误") int threadId,
                                              @RequestParam(required = false, defaultValue = "1") int pageNum) {
-        return replyService.getPost(threadId, pageNum);
+        return replyServiceImpl.getPost(threadId, pageNum);
     }
 
 
@@ -44,7 +44,7 @@ public class ReplyController {
     @GetMapping("/lzl")
     public Result<PageInfo<ReplyVO>> getReplyInReply(@RequestParam @Min(value = 1, message = "postId错误") int postId,
                                                      @RequestParam(defaultValue = "1", required = false) int pageNum) throws NotFoundException {
-        return replyService.getLzl(postId, pageNum);
+        return replyServiceImpl.getLzl(postId, pageNum);
     }
 
     @ApiOperation("添加楼中楼")
@@ -53,7 +53,7 @@ public class ReplyController {
     @PostMapping("/lzl")
     public Status addLzl(@RequestParam @Min(value = 1, message = "postId错误") int postId,
                          @RequestBody @Validated ReplyDTO dto) throws Exception {
-        return replyService.addLzl(postId, dto);
+        return replyServiceImpl.addLzl(postId, dto);
     }
 
 
@@ -63,7 +63,7 @@ public class ReplyController {
     @PostMapping("/post")
     public Status addPost(@RequestParam @Min(value = 1, message = "threadId错误") int threadId,
                           @RequestBody @Validated ReplyDTO dto) throws Exception {
-        return replyService.addPost(threadId, dto);
+        return replyServiceImpl.addPost(threadId, dto);
     }
 
 
@@ -72,7 +72,7 @@ public class ReplyController {
 
     @DeleteMapping("/reply/{replyId}")
     public Status deleteReply(@PathVariable @Min(value = 1, message = "参数错误") int replyId) throws NotFoundException {
-        return replyService.deleteReply(replyId);
+        return replyServiceImpl.deleteReply(replyId);
     }
 
 

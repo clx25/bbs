@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     private ReplyMeMapper replyMeMapper;
 
     @Resource
-    private CaptchaService captchaService;
+    private CaptchaService captchaServiceImpl;
 
     //支持的头像图片类型
     @SuppressWarnings("UnstableApiUsage")
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Status signup(SignupDTO dto) throws ArgsNotValidException {
-        captchaService.checkCaptcha(dto.getEmail(), dto.getCaptcha());
+        captchaServiceImpl.checkCaptcha(dto.getEmail(), dto.getCaptcha());
         //创建一个8位字符串的盐值
         String salt = UUID.randomUUID().toString().substring(0, 8);
         dto.setSalt(salt);
@@ -261,7 +261,7 @@ public class UserServiceImpl implements UserService {
         if (hasEmail) {
             throw new ArgsNotValidException("该邮箱已存在");
         }
-        captchaService.sendCaptchaAndSave(dto.getEmail());
+        captchaServiceImpl.sendCaptchaAndSave(dto.getEmail());
         return ResultUtil.success();
     }
 
@@ -271,7 +271,7 @@ public class UserServiceImpl implements UserService {
         if (!hasEmail) {
             throw new ArgsNotValidException("邮箱不存在");
         }
-        captchaService.sendCaptchaAndSave(dto.getEmail());
+        captchaServiceImpl.sendCaptchaAndSave(dto.getEmail());
 
 
         return ResultUtil.success();
@@ -296,7 +296,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Status resetPassword(ResetPasswordDTO dto) throws ArgsNotValidException {
 
-        captchaService.checkCaptcha(dto.getEmail(), dto.getCaptcha());
+        captchaServiceImpl.checkCaptcha(dto.getEmail(), dto.getCaptcha());
 
         String salt = UUID.randomUUID().toString().substring(0, 8);
         String password = new Md5Hash(dto.getPassword(), salt).toHex();

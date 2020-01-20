@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class ReplyMeServiceImpl implements ReplyMeService {
 
 
-    private final UserService userService;
+    private final UserService userServiceImpl;
 
     private final ReplyMapper replyMapper;
     private final ThreadMapper threadMapper;
@@ -44,7 +44,7 @@ public class ReplyMeServiceImpl implements ReplyMeService {
     @Override
     public Result<List<ReplyMeVO>> listReplyMe(String status) {
         //设置登录用户信息
-        int userId = userService.getUserId();
+        int userId = userServiceImpl.getUserId();
         List<ReplyMeVO> replyMeVOList=null;
         if ("unread".equals(status)) {
             //获取未读的消息
@@ -97,7 +97,7 @@ public class ReplyMeServiceImpl implements ReplyMeService {
 
     @Override
     public Status deleteReplyMe(int replyId) throws NotFoundException {
-        int userId = userService.getUserId();
+        int userId = userServiceImpl.getUserId();
         int i = replyMeMapper.deleteReplyMeIfExists(userId, replyId);
         if (i == 0) {
             throw new NotFoundException("该回复不在回复列表");
@@ -196,7 +196,7 @@ public class ReplyMeServiceImpl implements ReplyMeService {
     @Override
     public Status markRead(Integer replyId) throws NotFoundException {
 
-        int userId = userService.getUserId();
+        int userId = userServiceImpl.getUserId();
 
         if (replyId == null) {
             replyMeMapper.updateAllRead(userId);

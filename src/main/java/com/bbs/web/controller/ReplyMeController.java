@@ -24,7 +24,7 @@ import java.util.List;
 public class ReplyMeController {
 
 
-    private final ReplyMeService replyMeService;
+    private final ReplyMeService replyMeServiceImpl;
 
     @ApiOperation("获取收到的回复消息")
     @ApiImplicitParam(name = "status", allowableValues = "history,unread"
@@ -35,7 +35,7 @@ public class ReplyMeController {
                                                      @NotNull(message = "需要状态信息")
                                                      @Pattern(regexp = "(history|unread)", message = "状态信息错误")
                                                              String status) {
-        return replyMeService.listReplyMe(status);
+        return replyMeServiceImpl.listReplyMe(status);
     }
 
 
@@ -45,7 +45,7 @@ public class ReplyMeController {
     @PutMapping({"/replyMe", "/replyMe/{replyId}"})
     public Status markRead(@PathVariable(required = false)
                            @Min(value = 1, message = "无效的replyId") Integer replyId) throws NotFoundException {
-        return replyMeService.markRead(replyId);
+        return replyMeServiceImpl.markRead(replyId);
     }
 
 
@@ -55,7 +55,7 @@ public class ReplyMeController {
     @DeleteMapping("/replyMe/{replyId}")
     public Status deleteMsg(@PathVariable
                             @Min(value = 1, message = "无效的replyId") Integer replyId) throws NotFoundException {
-        return replyMeService.deleteReplyMe(replyId);
+        return replyMeServiceImpl.deleteReplyMe(replyId);
     }
 
 

@@ -23,12 +23,12 @@ import java.util.List;
 @Api(tags = "版块控制器")
 public class BoardController {
 
-    private final BoardService boardService;
+    private final BoardService boardServiceImpl;
 
     @ApiOperation("获取启用的版块列表")
     @GetMapping("/board")
     public Result<List<BoardVO>> getEnableBoard() {
-        return boardService.listBoard();
+        return boardServiceImpl.listBoard();
     }
 
 
@@ -36,7 +36,7 @@ public class BoardController {
     @ApiImplicitParam(value = "版块id",name = "boardId",required = true)
     @GetMapping("/board/{boardId}")
     public Result<BoardVO> getBoard(@PathVariable @Min(value = 1, message = "boardId参数错误") int boardId) throws NotFoundException {
-        return boardService.getBoard(boardId);
+        return boardServiceImpl.getBoard(boardId);
     }
 
 }

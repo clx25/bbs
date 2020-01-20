@@ -42,7 +42,7 @@ public class ThreadServiceImpl implements ThreadService {
     private ReplyMapper replyMapper;
 
     @Resource
-    private UserService userService;
+    private UserService userServiceImpl;
 
 
     @Override
@@ -122,7 +122,7 @@ public class ThreadServiceImpl implements ThreadService {
     @Override
     public Status postThread(AddThreadDTO dto) {
 
-        int userId = userService.getUserId();
+        int userId = userServiceImpl.getUserId();
         dto.setUserId(userId);
 
         threadMapper.addThread(dto);

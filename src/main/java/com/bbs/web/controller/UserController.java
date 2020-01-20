@@ -28,20 +28,20 @@ import java.util.List;
 public class UserController {
 
 
-    private final UserService userService;
+    private final UserService userServiceImpl;
 
 
     @ApiOperation("登录")
     @PostMapping(value = "/signin")
     public Status signin(@RequestBody @Valid SigninDTO dto) {
-        return userService.signin(dto);
+        return userServiceImpl.signin(dto);
     }
 
 
     @ApiOperation("注册")
     @PostMapping("/signup")
     public Status signup(@RequestBody @Valid SignupDTO dto) throws ArgsNotValidException {
-        return userService.signup(dto);
+        return userServiceImpl.signup(dto);
     }
 
 
@@ -49,47 +49,47 @@ public class UserController {
     @ApiImplicitParam(name = "userId", value = "用户id", paramType = "path", required = true)
     @GetMapping("/account/{userId}")
     public Result<AccountVO> getAccount(@PathVariable Integer userId) throws NotFoundException {
-        return userService.getAccount(userId);
+        return userServiceImpl.getAccount(userId);
     }
 
 
     @ApiOperation(value = "获取登录用户资料")
     @GetMapping("/account")
     public Result<AccountVO> getAccount() throws NotFoundException {
-        return userService.getAccount(null);
+        return userServiceImpl.getAccount(null);
     }
 
 
     @ApiOperation("获取登录用户发布的帖子")
     @GetMapping("/account/myThread")
     public Result<List<MyThreadVO>> listMyThread() {
-        return userService.listMyThread();
+        return userServiceImpl.listMyThread();
     }
 
 
     @ApiOperation(value = "获取登录用户基本信息", notes = "如果已登录，则返回数据，如果没登录，状态为200，用户信息为null")
     @GetMapping("/user")
     public Result<UserVO> getUser() {
-        return userService.getUser();
+        return userServiceImpl.getUser();
     }
 
 
     @ApiOperation(value = "修改个人资料")
     @PutMapping("/account")
     public Status updateAccount(@RequestBody @Valid UpdateAccountDTO dto) {
-        return userService.updateAccount(dto);
+        return userServiceImpl.updateAccount(dto);
     }
 
     @ApiOperation("重置密码")
     @PutMapping("/password")
     public Status resetPassword(@RequestBody @Valid ResetPasswordDTO dto) throws ArgsNotValidException {
-        return userService.resetPassword(dto);
+        return userServiceImpl.resetPassword(dto);
     }
 
     @ApiOperation("退出登录")
     @GetMapping("/logout")
     public Status logout() {
-        return userService.logout();
+        return userServiceImpl.logout();
     }
 
 
@@ -97,20 +97,20 @@ public class UserController {
     @ApiImplicitParam("头像文件")
     @PostMapping("/avatar")
     public Status uploadAvatar(@NotNull(message = "头像文件为空") MultipartFile file) throws Exception {
-        return userService.avatarSetting(file);
+        return userServiceImpl.avatarSetting(file);
     }
 
 
     @ApiOperation("注册发送验证码")
     @PostMapping("/signup/captcha")
     public Status signupSendCaptcha(@RequestBody @Valid SendCaptchaDTO dto) throws ArgsNotValidException {
-        return userService.signupSendCaptcha(dto);
+        return userServiceImpl.signupSendCaptcha(dto);
     }
 
     @ApiOperation("重置密码发送验证码")
     @PostMapping("/user/password/captcha")
     public Status resetPasswordCaptcha(@RequestBody @Valid SendCaptchaDTO dto) throws ArgsNotValidException {
-        return userService.resetPasswordCaptcha(dto);
+        return userServiceImpl.resetPasswordCaptcha(dto);
     }
 
 }

@@ -25,7 +25,7 @@ import javax.validation.constraints.Min;
 public class ThreadController {
 
 
-    private final ThreadService threadService;
+    private final ThreadService threadServiceImpl;
 
 
     @ApiOperation("根据帖子id获取回帖")
@@ -33,7 +33,7 @@ public class ThreadController {
 
     @GetMapping("/thread/{threadId}")
     public Result<ThreadVO> getThread(@PathVariable int threadId) throws NotFoundException {
-        return threadService.getThread(threadId);
+        return threadServiceImpl.getThread(threadId);
     }
 
 
@@ -44,7 +44,7 @@ public class ThreadController {
     @GetMapping("/thread")
     public Result<PageInfo<ThreadVO>> listThread(@RequestParam @Min(value = 1, message = "boardId错误") int boardId,
                                                  @RequestParam(required = false, defaultValue = "1") int pageNum) throws Exception {
-        return threadService.listThread(boardId, pageNum);
+        return threadServiceImpl.listThread(boardId, pageNum);
     }
 
 
@@ -52,6 +52,6 @@ public class ThreadController {
 
     @PostMapping("/thread")
     public Status postThread(@RequestBody @Valid AddThreadDTO dto) {
-        return threadService.postThread(dto);
+        return threadServiceImpl.postThread(dto);
     }
 }
