@@ -11,34 +11,63 @@
 api文档：Swagger
 
 src
+
 ├─main
+
 │  ├─java
+
 │  │  └─com
+
 │  │      └─bbs
+
 │  │          ├─annotation	//自定义注解
+
 │  │          ├─config		//配置类
+
 │  │          ├─controller	//控制层
+
 │  │          ├─entity		//实体类
+
 │  │          │  ├─database	//数据库相关
+
 │  │          │  ├─dto		//接收页面数据
+
 │  │          │  └─vo		//返回页面数据
+
 │  │          ├─exception		//统一异常处理
+
 │  │          │  └─custom 		//自定义异常
+
 │  │          ├─interceptor	//拦截器
+
 │  │          ├─mapper		//mapper接口
+
 │  │          │  └─validation	//mapper入参校验
+
 │  │          ├─service	//service层接口
+
 │  │          │  └─impl		//service层实现类
+
 │  │          ├─shiro			//重写部分shiro类，使shiro支持RESTful
+
 │  │          │  └─realm		
+
 │  │          └─util		//工具包
+
 │  │
+
 │  └─resources	//springboot配置文件
+
 │      └─mapper	//MyBatis xml映射文件
+
 └─test
+
     └─java
+    
         └─com
+        
             └─bbs	//测试类
+            
 
 功能：
 
