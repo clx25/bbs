@@ -1,7 +1,7 @@
 package com.bbs.manager;
 
 import com.bbs.annotation.CacheSetting;
-import com.bbs.servie.UserService;
+import com.bbs.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

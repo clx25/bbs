@@ -1,6 +1,6 @@
 package com.bbs.mapper.validation;
 
-import com.bbs.exception.customexception.MapperArgsException;
+import com.bbs.exception.custom.MapperArgsException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -15,7 +15,7 @@ import java.util.Collection;
 @Component
 public class MapperValidator {
 
-    @Around("execution(* com.own.mapper.*Mapper.*(*))")
+    @Around("execution(* com.bbs.mapper.*Mapper.*(*))")
     public Object isValid(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         for (Object arg : args) {

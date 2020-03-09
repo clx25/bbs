@@ -1,7 +1,7 @@
 package com.bbs.util;
 
 import com.bbs.annotation.FieldAlias;
-import com.bbs.exception.customexception.ReflectionException;
+import com.bbs.exception.custom.ReflectionException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 

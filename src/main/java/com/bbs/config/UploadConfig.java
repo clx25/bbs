@@ -8,7 +8,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 public class UploadConfig {
 
     @Bean
-    public CommonsMultipartResolver commonsMultipartResolver(){
+    public CommonsMultipartResolver commonsMultipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
         //设置上传文件的最大上传大小
         multipartResolver.setMaxUploadSize(4194304);

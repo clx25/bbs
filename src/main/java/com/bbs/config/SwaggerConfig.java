@@ -3,8 +3,7 @@ package com.bbs.config;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
+import org.springframework.context.annotation.Profile;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -19,21 +18,19 @@ import java.util.ArrayList;
 
 @Configuration
 @EnableSwagger2
+@Profile({"dev"})
 public class SwaggerConfig {
 
     @Bean
     Docket docket(ApplicationContext applicationContext) {
-        String activeProfile = applicationContext.getEnvironment().getActiveProfiles()[0];
-
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
-                .enable("dev".equals(activeProfile))
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.bbs.web.controller"))
                 .paths(PathSelectors.regex("((?!Error).)*"))
                 .build()
                 .tags(new Tag("版块控制器", "获取版块信息"), getTags());
         Contact contact = new Contact("clx", "", "");
-        ApiInfo apiInfo = new ApiInfo("bbs API文档", "Api Documentation", "1.0", "", contact, "Apache 2.0", "", new ArrayList());
+        ApiInfo apiInfo = new ApiInfo("bbs API文档", "Api Documentation", "1.0", "", contact, "Apache 2.0", "", new ArrayList<>());
 
         return docket.apiInfo(apiInfo);
     }

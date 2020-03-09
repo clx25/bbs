@@ -40,4 +40,5 @@ public class ReplyMeVO {
 
     @ApiModelProperty("回复对应的帖子id")
     private int threadId;
+
 }

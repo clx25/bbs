@@ -1,11 +1,11 @@
 package com.bbs.exception;
 
 import com.bbs.entity.Status;
-import com.bbs.exception.customexception.ArgsNotValidException;
-import com.bbs.exception.customexception.MapperArgsException;
+import com.bbs.exception.custom.ArgsNotValidException;
+import com.bbs.exception.custom.MapperArgsException;
+import com.bbs.exception.custom.NotFoundException;
 import com.bbs.util.ResultUtil;
 import com.bbs.util.StatusEnum;
-import com.bbs.exception.customexception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.CredentialsException;
@@ -16,7 +16,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.mail.MailException;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -162,7 +161,7 @@ public class GlobalExceptionHandler {
     public Status mapperArgsException(MapperArgsException e) {
         log.error("mapper入参异常", e);
         Status status = new Status();
-        status.setMsg("网络异常，请稍后再试（手动滑稽）");
+        status.setMsg("网络异常，请稍后再试");
         return status;
     }
 

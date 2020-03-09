@@ -14,4 +14,8 @@ public class MvcConfig implements WebMvcConfigurer {
         configurer.enable();
     }
 
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(new WebsocketInterceptor());
+//    }
 }

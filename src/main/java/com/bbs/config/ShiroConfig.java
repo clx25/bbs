@@ -5,7 +5,7 @@ import com.bbs.mapper.FilterChainMapper;
 import com.bbs.shiro.HttpMethodAnonymousFilter;
 import com.bbs.shiro.CustomShiroFilterFactoryBean;
 import com.bbs.shiro.HttpMethodUserFilter;
-import com.bbs.web.realm.UserSigninRealm;
+import com.bbs.shiro.realm.UserSigninRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;

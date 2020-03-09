@@ -21,10 +21,10 @@ class BbsApplicationTests {
     @Test
     void test() {
         String activeProfile = applicationContext.getEnvironment().getActiveProfiles()[0];
-        System.out.println(activeProfile);
+
         Profiles dev = Profiles.of("dev");
         boolean b = environment.acceptsProfiles(dev);
-        System.out.println(b);
+
 
     }
 
