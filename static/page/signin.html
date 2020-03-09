@@ -72,7 +72,7 @@
 	axios.interceptors.response.use(result=> {
 
       var lastPage=document.referrer
-      if(lastPage.indexOf("signup")==-1||lastPage.indexOf("resetpassword")==-1){
+      if(lastPage.indexOf("signup")==-1&&lastPage.indexOf("resetpassword")==-1){
         window.location.href=document.referrer
       }else{
         window.location.href="../"
@@ -88,7 +88,7 @@
 
   return Promise.resolve(error);
 })
-    axios.defaults.baseURL = '/bbs'
+    axios.defaults.baseURL = 'http://192.168.2.234/bbs'
     var vm=new Vue({
         el:"#app",
         data:{

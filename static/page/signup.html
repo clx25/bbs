@@ -78,7 +78,7 @@
 <script>
 
 
-    axios.defaults.baseURL = '/bbs'
+    axios.defaults.baseURL = 'http://192.168.2.234/bbs'
     var vm=new Vue({
         el:"#app",
         data:{
@@ -104,17 +104,17 @@
                     	this.msg="注册成功"
                     }
                 }).catch(error=>{
-                    
                     this.msg=error.response.data.msg
                 })
             },
             sendCaptcha(){
                 this.msg=""
-                this.count_down()
               axios.post("/signup/captcha",{
                 email:this.email
               }).then(result=>{
-
+                  this.count_down()
+              }).catch(error=>{
+                this.msg=error.response.data.msg
               })
             },
             count_down(){
