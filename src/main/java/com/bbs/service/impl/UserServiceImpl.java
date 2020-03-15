@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 @Service
 
 public class UserServiceImpl implements UserService {
-    public static UserService userServiceImpl=new UserServiceImpl();
 
     @Resource
     private UserMapper userMapper;
@@ -55,7 +54,7 @@ public class UserServiceImpl implements UserService {
     @SuppressWarnings("UnstableApiUsage")
     private static final MediaType[] AVATAR_TYPE = {MediaType.JPEG, MediaType.PNG, MediaType.BMP, MediaType.GIF, MediaType.WEBP};
     //头像保存位置
-    private static final String AVATAR_PATH = "E:/avatar/";
+    private static final String AVATAR_PATH = "/srv/bbs/images/avatar/";
     //缓存用户(id-用户信息)的key
     private static final String USER_CACHE_KEY = "user";
 
@@ -306,7 +305,6 @@ public class UserServiceImpl implements UserService {
 
         return ResultUtil.success();
     }
-
 
 
 }
