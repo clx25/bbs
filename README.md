@@ -10,7 +10,7 @@
 
 api文档：Swagger
 
-![GWiSe0.png](https://s1.ax1x.com/2020/04/08/GWiSe0.png)
+![GWF68e.png](https://s1.ax1x.com/2020/04/08/GWF68e.png)
 
 功能：
 
