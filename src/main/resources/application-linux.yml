@@ -1,0 +1,6 @@
+logging:
+  file:
+    path: /srv/bbs/log/
+
+
+

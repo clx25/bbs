@@ -6,11 +6,13 @@ import com.bbs.exception.custom.MapperArgsException;
 import com.bbs.exception.custom.NotFoundException;
 import com.bbs.util.ResultUtil;
 import com.bbs.util.StatusEnum;
+import com.sun.org.apache.regexp.internal.REUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -108,6 +110,13 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public Status credentialsException() {
         return ResultUtil.info(HttpStatus.UNAUTHORIZED.value(), "账号或密码错误");
+    }
+
+    //权限验证异常
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public Status unauthorizedException(UnauthorizedException e) {
+        return ResultUtil.info(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
     }
 
     //账号被锁定

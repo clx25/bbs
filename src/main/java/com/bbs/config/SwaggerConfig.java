@@ -1,6 +1,5 @@
 package com.bbs.config;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -18,11 +17,11 @@ import java.util.ArrayList;
 
 @Configuration
 @EnableSwagger2
-@Profile({"dev"})
+@Profile({"win"})
 public class SwaggerConfig {
 
     @Bean
-    Docket docket(ApplicationContext applicationContext) {
+    Docket docket() {
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.bbs.web.controller"))

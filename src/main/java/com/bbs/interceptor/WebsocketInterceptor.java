@@ -14,7 +14,7 @@ import java.util.Map;
 @Component
 public class WebsocketInterceptor implements HandshakeInterceptor {
     @Resource
-    private UserService userServiceImpl;
+    private UserService userService;
 
 
     /**
@@ -22,7 +22,7 @@ public class WebsocketInterceptor implements HandshakeInterceptor {
      */
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) {
-        UserVO userVO = userServiceImpl.getUserSimpleInfo();
+        UserVO userVO = userService.getUserSimpleInfo();
         if (userVO != null) {
             attributes.put("user", userVO);
         }

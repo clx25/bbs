@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.2.236:3306/bbs?serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  mail:
+    username: xxx@sina.com
+    password: xxx
+    host: smtp.sina.com
+  redis:
+    host: 192.168.2.234
+    port: 6379
+
+logging:
+  file:
+    path: E:\bbs\log
+
+avatarPath: E:\avatar\

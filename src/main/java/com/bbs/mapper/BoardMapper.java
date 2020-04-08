@@ -31,6 +31,6 @@ public interface BoardMapper {
      * @param boardIds 版块id集合
      * @return key为版块id，value为版块信息
      */
-    @MapKey("id")
-    Map<Integer,BoardDO> listBoardInBoardIds(Set<Integer> boardIds);
+
+    List<BoardDO> listBoardInBoardIds(Set<Integer> boardIds);
 }

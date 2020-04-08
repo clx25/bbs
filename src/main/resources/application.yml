@@ -1,3 +1,30 @@
 spring:
   profiles:
-    active: dev
+    active: win
+
+
+pagehelper:
+  reasonable: true
+  offset-as-page-num: true
+  helper-dialect: mysql
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    map-underscore-to-camel-case: true
+    local-cache-scope: statement
+  type-aliases-package: com.bbs.entity
+
+logging:
+    level:
+      com.own: debug
+    file:
+      max-history: 15
+      max-size: 20MB
+
+
+server:
+  servlet:
+    context-path: /bbs

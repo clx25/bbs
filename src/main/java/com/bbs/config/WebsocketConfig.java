@@ -16,12 +16,12 @@ public class WebsocketConfig implements WebSocketConfigurer {
 
 
     private final HandshakeInterceptor websocketInterceptor;
-
+    private final ChatController chatController;
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-
-        registry.addHandler(new ChatController(), "/chat").addInterceptors(websocketInterceptor);
+        registry.addHandler(chatController, "/chat").addInterceptors(websocketInterceptor);
     }
+
 
 
 }

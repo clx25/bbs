@@ -1,12 +1,12 @@
 package com.bbs.controller;
 
 import com.bbs.entity.Status;
+import com.bbs.service.ThreadService;
 import com.github.pagehelper.PageInfo;
 import com.bbs.entity.Result;
 import com.bbs.entity.dto.AddThreadDTO;
 import com.bbs.entity.vo.ThreadVO;
 import com.bbs.exception.custom.NotFoundException;
-import com.bbs.service.ThreadService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,7 +25,7 @@ import javax.validation.constraints.Min;
 public class ThreadController {
 
 
-    private final ThreadService threadServiceImpl;
+    private final ThreadService threadService;
 
 
     @ApiOperation("根据帖子id获取回帖")
@@ -33,7 +33,7 @@ public class ThreadController {
 
     @GetMapping("/thread/{threadId}")
     public Result<ThreadVO> getThread(@PathVariable int threadId) throws NotFoundException {
-        return threadServiceImpl.getThread(threadId);
+        return threadService.getThread(threadId);
     }
 
 
@@ -44,7 +44,7 @@ public class ThreadController {
     @GetMapping("/thread")
     public Result<PageInfo<ThreadVO>> listThread(@RequestParam @Min(value = 1, message = "boardId错误") int boardId,
                                                  @RequestParam(required = false, defaultValue = "1") int pageNum) throws Exception {
-        return threadServiceImpl.listThread(boardId, pageNum);
+        return threadService.listThread(boardId, pageNum);
     }
 
 
@@ -52,6 +52,6 @@ public class ThreadController {
 
     @PostMapping("/thread")
     public Status postThread(@RequestBody @Valid AddThreadDTO dto) {
-        return threadServiceImpl.postThread(dto);
+        return threadService.postThread(dto);
     }
 }

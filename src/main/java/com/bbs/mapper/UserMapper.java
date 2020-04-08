@@ -5,6 +5,7 @@ import com.bbs.entity.dto.UpdateAccountDTO;
 import com.bbs.entity.database.UserDO;
 import org.apache.ibatis.annotations.MapKey;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -65,13 +66,13 @@ public interface UserMapper {
 
 
     /**
-     * 根据用户id集合从redis获取用户数据
+     * 根据用户id集合获取用户数据
      *
      * @param userIds 用户id集合
-     * @return 用户信息map，key是用户id,value是用户信息
+     * @return 用户信息集合
      */
-    @MapKey("id")
-    Map<Integer, UserDO> listUserByIds(Set<Integer> userIds);
+
+    List<UserDO> listUserByIds(Set<Integer> userIds);
 
 
     /**

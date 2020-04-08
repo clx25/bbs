@@ -15,27 +15,27 @@ import javax.annotation.Resource;
 public class ChatController extends TextWebSocketHandler {
 
 
-    private static ChatService chatServiceImpl;
+    private static ChatService chatService;
 
     @Resource
-    public void setChatServiceImpl(ChatService chatServiceImpl) {
-        ChatController.chatServiceImpl = chatServiceImpl;
+    public void setChatServiceImpl(ChatService chatService) {
+        ChatController.chatService = chatService;
     }
 
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
-        chatServiceImpl.onOpen(session);
+        chatService.onOpen(session);
     }
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) {
-        chatServiceImpl.onMessage(session, message);
+        chatService.onMessage(session, message);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        chatServiceImpl.onClose(session);
+        chatService.onClose(session);
     }
 
     @Override
